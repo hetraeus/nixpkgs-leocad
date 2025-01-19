@@ -32,9 +32,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "leozide";
-    repo  = finalAttrs.pname;
-    tag   = "v${finalAttrs.version}";
-    hash  = "sha256-IY9mr2gSMZL9pxiVTKH/f7rjsOvBDNgwVKpXA57oMGo=";
+    repo = finalAttrs.pname;
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IY9mr2gSMZL9pxiVTKH/f7rjsOvBDNgwVKpXA57oMGo=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs = [ zlib libGL ];
+  buildInputs = [
+    zlib
+    libGL
+  ];
 
   propagatedBuildInputs = [ povray ];
 
@@ -75,7 +78,10 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "leocad";
     homepage = "https://www.leocad.org/";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ peterhoeg hetraeus ];
+    maintainers = with lib.maintainers; [
+      peterhoeg
+      hetraeus
+    ];
     platforms = lib.platforms.linux;
   };
-}
+})
