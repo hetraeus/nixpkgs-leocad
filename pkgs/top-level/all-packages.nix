@@ -5476,9 +5476,9 @@ with pkgs;
   unzipNLS = lowPrio (unzip.override { enableNLS = true; });
 
   inherit (callPackages ../servers/varnish { })
-    varnish60 varnish75;
+    varnish60 varnish75 varnish76;
   inherit (callPackages ../servers/varnish/packages.nix { })
-    varnish60Packages varnish75Packages;
+    varnish60Packages varnish75Packages varnish76Packages;
 
   varnishPackages = varnish75Packages;
   varnish = varnishPackages.varnish;
@@ -7871,6 +7871,11 @@ with pkgs;
     inherit (llvmPackages) llvm libclang;
   };
 
+  daggerfall-unity-unfree = daggerfall-unity.override {
+    pname = "daggerfall-unity-unfree";
+    includeUnfree = true;
+  };
+
   dbt = with python3Packages; toPythonApplication dbt-core;
 
   devbox = callPackage ../development/tools/devbox { buildGoModule = buildGo123Module; };
@@ -9012,6 +9017,9 @@ with pkgs;
     else if name == "nblibc" then targetPackages.netbsd.libc or netbsd.libc
     else if name == "wasilibc" then targetPackages.wasilibc or wasilibc
     else if name == "relibc" then targetPackages.relibc or relibc
+    else if name == "llvm" then
+      # Use llvmPackages_git until LLVM 20 is the default.
+      targetPackages.llvmPackages_git.libc or llvmPackages_git.libc
     else throw "Unknown libc ${name}";
 
   libcCross =
@@ -11866,9 +11874,6 @@ with pkgs;
   };
 
   tt-rss = callPackage ../servers/tt-rss { };
-  inherit (callPackages ../servers/web-apps/matomo {})
-    matomo
-    matomo-beta;
 
   unpackerr = callPackage ../servers/unpackerr {
     inherit (darwin.apple_sdk.frameworks) Cocoa WebKit;
@@ -12550,7 +12555,7 @@ with pkgs;
     zfs_2_2
     zfs_2_3
     zfs_unstable;
-  zfs = zfs_2_2;
+  zfs = zfs_2_3;
 
   ### DATA
 
@@ -13445,10 +13450,6 @@ with pkgs;
 
   guitarix = callPackage ../applications/audio/guitarix {
     fftw = fftwSinglePrec;
-  };
-
-  gurk-rs = callPackage ../applications/networking/instant-messengers/gurk-rs {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
   puddletag = libsForQt5.callPackage ../applications/audio/puddletag { };
@@ -15480,10 +15481,6 @@ with pkgs;
 
   valentina = libsForQt5.callPackage ../applications/misc/valentina { };
 
-  vcprompt = callPackage ../applications/version-management/vcprompt {
-    autoconf = buildPackages.autoconf269;
-  };
-
   vdirsyncer = with python3Packages; toPythonApplication vdirsyncer;
 
   vengi-tools = darwin.apple_sdk_11_0.callPackage ../applications/graphics/vengi-tools {
@@ -15704,9 +15701,9 @@ with pkgs;
 
   webcamoid = libsForQt5.callPackage ../applications/video/webcamoid { };
 
-  webcord = callPackage ../by-name/we/webcord/package.nix { electron = electron; };
+  webcord = callPackage ../by-name/we/webcord/package.nix { electron = electron_33; };
 
-  webcord-vencord = callPackage ../by-name/we/webcord-vencord/package.nix { electron = electron_31; };
+  webcord-vencord = callPackage ../by-name/we/webcord-vencord/package.nix { electron = electron_33; };
 
   webmacs = libsForQt5.callPackage ../applications/networking/browsers/webmacs {
     stdenv = if stdenv.cc.isClang then gccStdenv else stdenv;
@@ -18317,7 +18314,7 @@ with pkgs;
   };
 
   weasis = callPackage ../by-name/we/weasis/package.nix {
-    jre = jdk21;
+    jre = jdk23;
   };
 
   sieveshell = with python3.pkgs; toPythonApplication managesieve;
